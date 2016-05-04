@@ -1,4 +1,7 @@
 require "rubocop/diff/version"
+require 'git_diff_parser'
+require 'rubocop/diff/line'
+require 'rubocop/diff/patch'
 
 module Rubocop
   module Diff
