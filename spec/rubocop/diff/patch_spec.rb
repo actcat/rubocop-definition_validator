@@ -34,5 +34,10 @@ index 51aec3b..ae23ea2 100644
     it 'second line is added line' do
       is_asserted_by{ subject[1].content == "+  def bar\n" }
     end
+
+    it 'line number is 2' do
+      is_asserted_by{ subject[0].number == subject[1].number }
+      is_asserted_by{ subject[0].number == 2 }
+    end
   end
 end
