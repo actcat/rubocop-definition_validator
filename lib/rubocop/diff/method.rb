@@ -29,6 +29,7 @@ class Method
 
     begin
       params = ast[1][0][2]
+      name = ast[1][0][1][1]
     rescue NoMethodError => ex
       raise InvalidAST, "Can't parse AST. \nAST: #{ast}\nError: #{ex}"
     end
@@ -38,11 +39,12 @@ class Method
     end
 
     @params = params[1..-1]
+    @name = name
   end
 
   # @param [Array<RuboCop::Node>] args
-  def callable?(args)
+  def callable?(name, args)
     # TODO: もっとマシにする
-    args.size == @params.size
+    name == @name && args.size == @params.size
   end
 end
