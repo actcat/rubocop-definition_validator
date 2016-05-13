@@ -2,7 +2,10 @@ module RuboCop
   module Cop
     module Lint
       class Diff < Cop
-        # TODO...
+        def on_send(node)
+          require 'pry'
+          binding.pry
+        end
       end
     end
   end

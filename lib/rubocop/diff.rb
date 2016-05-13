@@ -6,10 +6,6 @@ require 'rubocop/diff/line'
 require 'rubocop/diff/patch'
 require 'rubocop/diff/change_detector'
 
-RuboCop::Rails::Inject.defaults!
+RuboCop::Diff::Inject.defaults!
 
-# module Rubocop
-#   module Diff
-#     # Your code goes here...
-#   end
-# end
+require 'rubocop/cop/lint/diff'
