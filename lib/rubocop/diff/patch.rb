@@ -52,5 +52,7 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
       .select{|l| l.size == 2}
       .select{|l| t = l.map(&:type); t.include?('-') && t.include?('+')}
       .select{|l| l.all?{|x| x.content =~ /def\s+\w+/}}
+      .map{|l| l.sort_by(&:type)}
+      .map{|l| {added: l.first, removed: l.last}}
   end
 end

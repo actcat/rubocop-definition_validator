@@ -46,21 +46,30 @@ index 51aec3b..ae23ea2 100644
 
     it {is_expected.to be_a Array}
 
+    it 'should be Array of Hash' do
+      subject.each do |s|
+        is_asserted_by{ s.is_a? Hash }
+      end
+    end
+
     it 'contains removed method' do
       subject.each do |s|
-        is_asserted_by{ s.any?{|x| x.type == '-'} }
+        is_asserted_by{ s[:removed].is_a? Rubocop::Diff::Line}
+        is_asserted_by{ s[:removed].type == '-'}
       end
     end
 
     it 'contains added method' do
       subject.each do |s|
-        is_asserted_by{ s.any?{|x| x.type == '+'} }
+        is_asserted_by{ s[:added].is_a? Rubocop::Diff::Line}
+        is_asserted_by{ s[:added].type == '+'}
       end
     end
 
     it 'contains `def`' do
       subject.each do |s|
-        is_asserted_by{ s.all?{|x| x.content.include? 'def'} }
+        is_asserted_by{ s[:added].content.include? 'def' }
+        is_asserted_by{ s[:removed].content.include? 'def' }
       end
     end
   end
