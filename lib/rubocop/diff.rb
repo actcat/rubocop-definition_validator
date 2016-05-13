@@ -1,5 +1,6 @@
 require 'git_diff_parser'
 
+require 'rubocop'
 require "rubocop/diff/version"
 require 'rubocop/diff/inject'
 require 'rubocop/diff/line'
