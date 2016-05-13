@@ -45,6 +45,6 @@ class Rubocop::Diff::Method
   # @param [Array<RuboCop::Node>] args
   def callable?(name, args)
     # TODO: もっとマシにする
-    name == @name && args.size == @params.size
+    name == @name && args.size == @params.first.size
   end
 end
