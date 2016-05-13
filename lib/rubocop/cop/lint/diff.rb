@@ -6,9 +6,10 @@ module RuboCop
           name = node.method_name.to_s
           args = node.method_args
 
-          # TODO: こんなイメージなので、清書する
-          if old_method.callable?(name, args) && !new_method.callable?(name, args)
-            add_offence
+          Rubocop::Diff::ChangeDetector.changed_methods.each do |m|
+            next unless m[:removed].callable?(name, args) && m[:added].callable?(name, args)
+            # TODO: add_offence
+            break
           end
         end
       end

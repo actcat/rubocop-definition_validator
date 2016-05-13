@@ -44,7 +44,7 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
     end
   end
 
-  def changed_methods
+  def changed_method_codes
     lines = changed_lines
     lines
       .group_by{|l| l.number}

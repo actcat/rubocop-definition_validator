@@ -1,6 +1,6 @@
 require 'ripper'
 
-class Method
+class Rubocop::Diff::Method
   class InvalidAST < ArgumentError; end
 
   # @param [String] definition

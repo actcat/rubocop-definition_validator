@@ -41,8 +41,8 @@ index 51aec3b..ae23ea2 100644
     end
   end
 
-  describe '#changed_methods' do
-    subject{patch.changed_methods}
+  describe '#changed_method_codes' do
+    subject{patch.changed_method_codes}
 
     it {is_expected.to be_a Array}
 
