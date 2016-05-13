@@ -39,4 +39,10 @@ class Method
 
     @params = params[1..-1]
   end
+
+  # @param [Array<RuboCop::Node>] args
+  def callable?(args)
+    # TODO: もっとマシにする
+    args.size == @params.size
+  end
 end
