@@ -5,4 +5,9 @@ class Rubocop::Diff::Line < GitDiffParser::Line
   def body
     content[1..-1]
   end
+
+  # @return [String] + or -
+  def type
+    content[0]
+  end
 end

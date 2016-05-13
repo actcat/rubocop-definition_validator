@@ -16,7 +16,7 @@ index 51aec3b..ae23ea2 100644
  end
     DIFF
   }
-  let(:patch){Rubocop::Diff::Patch.new(diff)}
+  let(:patch){Rubocop::Diff::Patch.new(GitDiffParser::Patch.new(diff))}
 
   describe '#changed_lines' do
     subject{patch.changed_lines}
@@ -38,6 +38,30 @@ index 51aec3b..ae23ea2 100644
     it 'line number is 2' do
       is_asserted_by{ subject[0].number == subject[1].number }
       is_asserted_by{ subject[0].number == 2 }
+    end
+  end
+
+  describe '#changed_methods' do
+    subject{patch.changed_methods}
+
+    it {is_expected.to be_a Array}
+
+    it 'contains removed method' do
+      subject.each do |s|
+        is_asserted_by{ s.any?{|x| x.type == '-'} }
+      end
+    end
+
+    it 'contains added method' do
+      subject.each do |s|
+        is_asserted_by{ s.any?{|x| x.type == '+'} }
+      end
+    end
+
+    it 'contains `def`' do
+      subject.each do |s|
+        is_asserted_by{ s.all?{|x| x.content.include? 'def'} }
+      end
     end
   end
 end

@@ -7,6 +7,12 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
   ADDED_LINE   = -> (line) { line.start_with?('+') && line !~ /^\+\+\+/ }
   REMOVED_LINE = -> (line) { line.start_with?('-') && line !~ /^\-\-\-/ }
 
+  def initialize(original_patch)
+    @body = original_patch.body
+    @file = original_patch.file
+    @secure_hash = original_patch.secure_hash
+  end
+
   # @return [Array<Line>] changed lines
   def changed_lines
     line_number = 0
@@ -36,5 +42,15 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
 
       lines
     end
+  end
+
+  def changed_methods
+    lines = changed_lines
+    lines
+      .group_by{|l| l.number}
+      .values
+      .select{|l| l.size == 2}
+      .select{|l| t = l.map(&:type); t.include?('-') && t.include?('+')}
+      .select{|l| l.all?{|x| x.content =~ /def\s+\w+/}}
   end
 end
