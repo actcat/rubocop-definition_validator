@@ -39,5 +39,21 @@ describe Rubocop::Diff::Method do
 
       include_examples 'should_not_be_callable'
     end
+
+    context 'too many args, cant call' do
+      let(:code){'def foo(a, b)'}
+      let(:name){'foo'}
+      let(:args){[1,2,3]}
+
+      include_examples 'should_not_be_callable'
+    end
+
+    context 'not enough args, cant call' do
+      let(:code){'def foo(a, b)'}
+      let(:name){'foo'}
+      let(:args){[1]}
+
+      include_examples 'should_not_be_callable'
+    end
   end
 end

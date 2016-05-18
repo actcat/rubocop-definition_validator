@@ -42,9 +42,31 @@ class Rubocop::Diff::Method
     @name = name
   end
 
+  # TODO: もっとマシにする
   # @param [Array<RuboCop::Node>] args
   def callable?(name, args)
-    # TODO: もっとマシにする
-    name == @name && args.size == @params.first.size
+    return false unless name == @name
+
+    args = args.dup
+
+    # 通常の引数分shift
+    # TODO: shift 出来るかをちゃんと判定
+    return false unless args.shift(@params.first.size).size == @params.first.size
+
+    # デフォルト値付き引数
+
+    # rest 引数
+
+    # rest 引数後の通常引数
+
+    # キーワード引数
+    # XXX: キーワード引数にはデフォルト値付き引数がある
+
+    # キーワード rest 引数
+    # これがあれば、キーワード引数は何でも受け付けるようになる(flag)
+
+    # ブロックは無視
+
+    args.empty?
   end
 end
