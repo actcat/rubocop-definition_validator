@@ -50,11 +50,15 @@ class Rubocop::Diff::Method
     args = args.dup
 
     # 通常の引数分shift
-    # TODO: shift 出来るかをちゃんと判定
-    return false unless args.shift(normal_params.size).size == normal_params.size
+    normal_params_size = (normal_params || []).size
+    return false unless args.shift(normal_params_size).size == normal_params_size
 
     unless has_keyword_params?
-      return false unless args.pop(normal_params_after_rest.size).size == normal_params_after_rest.size
+      normal_params_after_rest_size = (normal_params_after_rest || []).size
+      return false unless args.pop(normal_params_after_rest_size).size == normal_params_after_rest_size
+
+      return true if rest_params
+      return args.size <= default_value_params.size if default_value_params
     end
 
     # デフォルト値付き引数
