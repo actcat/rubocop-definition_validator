@@ -61,14 +61,8 @@ class Rubocop::Diff::Method
       return args.size <= default_value_params.size if default_value_params
     end
 
-    # デフォルト値付き引数
-
-    # rest 引数
-
-    # rest 引数後の通常引数
 
     # キーワード引数
-    # XXX: キーワード引数にはデフォルト値付き引数がある
 
     # キーワード rest 引数
     # これがあれば、キーワード引数は何でも受け付けるようになる(flag)
@@ -84,6 +78,11 @@ class Rubocop::Diff::Method
   def has_keyword_params?
     !!((keyword_params && !keyword_params.empty?) ||
       keyword_rest_params)
+  end
+
+  def has_required_keyword_params?
+    (keyword_params && !keyword_params.empty?) &&
+      keyword_params.any?{|p| p[1] == false}
   end
 
   %i[
