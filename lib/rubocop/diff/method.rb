@@ -51,7 +51,11 @@ class Rubocop::Diff::Method
 
     # 通常の引数分shift
     # TODO: shift 出来るかをちゃんと判定
-    return false unless args.shift(@params.first.size).size == @params.first.size
+    return false unless args.shift(normal_params.size).size == normal_params.size
+
+    unless has_keyword_params?
+      return false unless args.pop(normal_params_after_rest.size).size == normal_params_after_rest.size
+    end
 
     # デフォルト値付き引数
 
@@ -68,5 +72,28 @@ class Rubocop::Diff::Method
     # ブロックは無視
 
     args.empty?
+  end
+
+
+  private
+
+  def has_keyword_params?
+    !!((keyword_params && !keyword_params.empty?) ||
+      keyword_rest_params)
+  end
+
+  %i[
+    normal_params
+    default_value_params
+    rest_params
+    normal_params_after_rest
+    keyword_params
+    keyword_rest_params
+  ].each.with_index do |name, idx|
+    eval <<-CODE
+def #{name}
+  @params[#{idx}]
+end
+    CODE
   end
 end
