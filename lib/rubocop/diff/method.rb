@@ -53,6 +53,12 @@ class Rubocop::Diff::Method
     normal_params_size = (normal_params || []).size
     return false unless args.shift(normal_params_size).size == normal_params_size
 
+    # 必須のキーワード引数がある場合、一番うしろの引数はキーワード引数
+    if has_required_keyword_params?
+      kwparam = args.pop(1)
+      return false unless kwparam.size == 1 && (kwparam[0].hash_type? || !kwparam[0].literal?)
+    end
+
     unless has_keyword_params?
       normal_params_after_rest_size = (normal_params_after_rest || []).size
       return false unless args.pop(normal_params_after_rest_size).size == normal_params_after_rest_size

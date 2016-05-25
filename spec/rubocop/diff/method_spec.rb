@@ -139,7 +139,29 @@ describe Rubocop::Diff::Method do
     end
 
     context 'when has keyword params'  do
-      # TODO
+      let(:hash){    double(literal?: true,  hash_type?: true)}
+      let(:literal){ double(literal?: true,  hash_type?: false)}
+      let(:varialbe){double(literal?: false, hash_type?: false)}
+
+      context 'when has required keyword params' do
+        let(:code){'def foo(bar:)'}
+        let(:name){'foo'}
+
+        context 'when receive a hash' do
+          let(:args){[hash]}
+          include_examples 'should_be_callable'
+        end
+
+        context 'when receive a literal expect hash' do
+          let(:args){[literal]}
+          include_examples 'should_not_be_callable'
+        end
+
+        context 'when receive a varialbe' do
+          let(:args){[varialbe]}
+          include_examples 'should_be_callable'
+        end
+      end
     end
   end
 end
