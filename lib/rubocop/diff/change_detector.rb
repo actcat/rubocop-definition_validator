@@ -2,7 +2,13 @@ module Rubocop::Diff::ChangeDetector
   class << self
     attr_reader :changed_methods
 
-    def init(diff)
+    def init(diff_path)
+      unless File.exist?(diff_path)
+        @changed_methods = []
+        return
+      end
+
+      diff = File.read(diff_path)
       parsed = GitDiffParser::Patches.parse(diff)
       patches = parsed.map{|orig_patch| patch = Rubocop::Diff::Patch.new(orig_patch)}
       # [
@@ -23,3 +29,6 @@ module Rubocop::Diff::ChangeDetector
     end
   end
 end
+
+# XXX: 暫定的に rubocop-diff.diff からdiffを読む
+Rubocop::Diff::ChangeDetector.init('./.rubocop-diff.diff')
