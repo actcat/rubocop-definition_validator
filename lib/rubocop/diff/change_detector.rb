@@ -20,7 +20,7 @@ module Rubocop::Diff::ChangeDetector
         .map{|code|
         code.map{|k, v|
           begin
-            [k, Rubocop::Diff::Method.new(v.content)]
+            [k, Rubocop::Diff::Method.new(v.body)]
           rescue Rubocop::Diff::Method::InvalidAST
             nil
           end

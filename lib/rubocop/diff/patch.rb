@@ -16,11 +16,13 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
   # @return [Array<Line>] changed lines
   def changed_lines
     line_number = 0
+    removed_line_offset = 0
 
     lines.each_with_index.inject([]) do |lines, (content, patch_position)|
       case content
       when RANGE_INFORMATION_LINE
         line_number = Regexp.last_match[:line_number].to_i
+        removed_line_offset = 0
       when ADDED_LINE
         line = Rubocop::Diff::Line.new(
           content: content,
@@ -29,15 +31,18 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
         )
         lines << line
         line_number += 1
+        removed_line_offset = 0
       when REMOVED_LINE
         line = Rubocop::Diff::Line.new(
           content: content,
-          number: line_number,
+          number: line_number + removed_line_offset,
           patch_position: patch_position
         )
         lines << line
+        removed_line_offset +=1
       when NOT_REMOVED_LINE
         line_number += 1
+        removed_line_offset = 0
       end
 
       lines

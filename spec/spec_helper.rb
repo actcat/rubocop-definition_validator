@@ -20,7 +20,7 @@
 require 'rubocop/diff'
 require 'rspec-power_assert'
 require 'pry'
-require 'pry_testcase'
+require 'pry_testcase/rspec'
 
 rubocop_path = File.join(File.dirname(__FILE__), '../vendor/rubocop')
 

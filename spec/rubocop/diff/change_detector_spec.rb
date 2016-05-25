@@ -2,18 +2,19 @@ require 'spec_helper'
 
 describe Rubocop::Diff::ChangeDetector do
   let(:diff){
-    <<-DIFF
-diff --git a/foo.rb b/bar.rb
-index 51aec3b..ae23ea2 100644
---- a/foo.rb
-+++ b/bar.rb
+    <<-'DIFF'
+diff --git a/test.rb b/test2.rb
+index df650ee..7180d75 100644
+--- a/test.rb
++++ b/test2.rb
 @@ -1,5 +1,5 @@
- class A
--  def foo
-+  def bar
-     puts 'foo'
-   end
+-def hello(name)
+-  puts "hello #{name}!"
++def hi(name)
++  puts "hi #{name}!"
  end
+ 
+ hello('pocke')
     DIFF
   }
 

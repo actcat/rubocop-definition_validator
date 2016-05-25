@@ -30,5 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-bundler', '~> 2.1.0'
   spec.add_development_dependency 'pry', '~> 0.10.3'
   spec.add_development_dependency 'rspec-power_assert', '~> 0.3.0'
-  spec.add_development_dependency 'pry_testcase', '~> 0.1.0'
+  spec.add_development_dependency 'pry_testcase', '~> 0.2.0'
 end
