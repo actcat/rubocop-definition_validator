@@ -51,4 +51,32 @@ index df650ee..7180d75 100644
       expect(cop.offenses.size).to eq 1
     end
   end
+
+  context 'when method args ware changed' do
+    let(:diff){<<-'CODE'}
+diff --git a/test.rb b/test2.rb
+index 6ca6c0f..6c5790d 100644
+--- a/test.rb
++++ b/test2.rb
+@@ -1,5 +1,5 @@
+-def hello(name)
+-  puts "hello #{name}"
++def hello(name, message)
++  puts "hello #{name} #{message}"
+ end
+ 
+-hello('pocke')
++hello('pocke', 'konnitiwa')
+    CODE
+
+    it 'accpets call with 2 args' do
+      inspect_source(cop, 'hello("pocke", "meow")')
+      expect(cop.offenses).to be_empty
+    end
+
+    it 'accpets call with 1 args' do
+      inspect_source(cop, 'hello("pocke")')
+      expect(cop.offenses.size).to eq 1
+    end
+  end
 end
