@@ -42,7 +42,6 @@ class Rubocop::Diff::Method
     @name = name
   end
 
-  # TODO: もっとマシにする
   # @param [Array<RuboCop::Node>] args
   def callable?(name, args)
     return false unless name == @name
@@ -53,33 +52,44 @@ class Rubocop::Diff::Method
     normal_params_size = (normal_params || []).size
     return false unless args.shift(normal_params_size).size == normal_params_size
 
-    # 必須のキーワード引数がある場合、一番うしろの引数はキーワード引数
     if has_required_keyword_params?
-      kwparam = args.pop(1)
-      return false unless kwparam.size == 1 && (kwparam[0].hash_type? || !kwparam[0].literal?)
+      decide_with_required_keyword_params(args)
+    elsif has_keyword_params?
+      decide_with_keyword_params(args)
+    else
+      decide_rest_args(args)
     end
-
-    unless has_keyword_params?
-      normal_params_after_rest_size = (normal_params_after_rest || []).size
-      return false unless args.pop(normal_params_after_rest_size).size == normal_params_after_rest_size
-
-      return true if rest_params
-      return args.size <= default_value_params.size if default_value_params
-    end
-
-
-    # キーワード引数
-
-    # キーワード rest 引数
-    # これがあれば、キーワード引数は何でも受け付けるようになる(flag)
-
-    # ブロックは無視
-
-    args.empty?
   end
 
 
   private
+
+  # decide default_value_params, rest_params, normal_params_after_rest
+  # @param [Array<RuboCop::Node>] args
+  # @return [Boolean]
+  def decide_rest_args(args)
+    normal_params_after_rest_size = (normal_params_after_rest || []).size
+    return false unless args.pop(normal_params_after_rest_size).size == normal_params_after_rest_size
+
+    # rest引数があれば全て呑み込むためtrue
+    return true if rest_params
+    # デフォルト値付き引数の数だけは呑み込める
+    return args.size <= default_value_params.size if default_value_params
+    return args.empty?
+  end
+
+  def decide_with_required_keyword_params(args)
+    kwparam = args.pop(1)
+    return false unless kwparam.size == 1 && (usable_as_keyword_param?(kwparam[0]))
+    return decide_rest_args(args)
+  end
+
+  def decide_with_keyword_params(args)
+    return true if decide_rest_args(args.dup)
+
+    return decide_with_required_keyword_params(args)
+  end
+
 
   def has_keyword_params?
     !!((keyword_params && !keyword_params.empty?) ||
@@ -104,5 +114,36 @@ def #{name}
   @params[#{idx}]
 end
     CODE
+  end
+
+  # @param [RuboCop::Node] arg
+  def usable_as_keyword_param?(arg)
+    # should be hash
+    return false unless arg
+    return false unless arg.hash_type? || !arg.literal?
+
+    # should have specified keyword
+    return true unless arg.hash_type?
+
+    required_keyword_names = keyword_params
+      .select{|x| x[1] == false}
+      .map{|x| x[0][1]}
+      .map{|x| x.chop.to_sym}
+
+    received_keyword_names = arg
+      .map(&:children)
+      .map{|x| x.first}
+      .map(&:children)
+      .map{|x| x.first}
+
+    return false unless required_keyword_names.all?{|name| received_keyword_names.include?(name)}
+    
+    return true if keyword_rest_params
+
+    allowed_keyword_names = keyword_params
+      .map{|x| x[0][1]}
+      .map{|x| x.chop.to_sym}
+
+    return received_keyword_names.all?{|name| allowed_keyword_names.include?(name)}
   end
 end
