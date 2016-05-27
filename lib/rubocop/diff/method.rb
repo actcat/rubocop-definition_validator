@@ -131,6 +131,7 @@ end
       .map{|x| x.chop.to_sym}
 
     received_keyword_names = arg
+      .children
       .map(&:children)
       .map{|x| x.first}
       .map(&:children)

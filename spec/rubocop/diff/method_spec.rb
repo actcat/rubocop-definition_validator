@@ -139,29 +139,84 @@ describe Rubocop::Diff::Method do
     end
 
     context 'when has keyword params' do
-      let(:hash){    double(literal?: true,  hash_type?: true)}
-      let(:literal){ double(literal?: true,  hash_type?: false)}
-      let(:varialbe){double(literal?: false, hash_type?: false)}
-
-      context 'when has required keyword params' do
-        let(:code){'def foo(bar:)'}
+      context 'when has keyword params with default value' do
+        let(:code){'def foo(bar: 1, baz: 2)'}
         let(:name){'foo'}
 
-        # TODO
-        context 'when receive a hash' do
-          let(:args){[hash]}
+        context 'when received no params' do
+          let(:args){[]}
           include_examples 'should_be_callable'
         end
 
-        context 'when receive a literal expect hash' do
-          let(:args){[literal]}
+        context 'when received a pair' do
+          let(:args){to_rubocop_ast('f bar: 3').method_args}
+          include_examples 'should_be_callable'
+        end
+
+        context 'when received unexpected keyword' do
+          let(:args){to_rubocop_ast('f hogehoge: 1').method_args}
+          include_examples 'should_not_be_callable'
+        end
+      end
+
+      context 'when has required keyword params' do
+        let(:code){'def foo(bar:, baz: 1)'}
+        let(:name){'foo'}
+
+        context 'when received no params' do
+          let(:args){[]}
           include_examples 'should_not_be_callable'
         end
 
-        context 'when receive a varialbe' do
-          let(:args){[varialbe]}
+        context 'when received required keyword' do
+          let(:args){to_rubocop_ast('f bar: 1').method_args}
           include_examples 'should_be_callable'
         end
+
+        context 'when received not required keyword only' do
+          let(:args){to_rubocop_ast('f baz: 1').method_args}
+          include_examples 'should_not_be_callable'
+        end
+
+        context 'when received unexpected keyword' do
+          let(:args){to_rubocop_ast('f hogehoge: 1').method_args}
+          include_examples 'should_not_be_callable'
+        end
+      end
+
+      context 'when has rest keyword params' do
+        let(:code){'def foo(bar: 1, **kwrest)'}
+        let(:name){'foo'}
+
+        context 'when received no params' do
+          let(:args){[]}
+          include_examples 'should_be_callable'
+        end
+
+        context 'when received unknown keyword' do
+          let(:args){to_rubocop_ast('f hogehoge: 1').method_args}
+          include_examples 'should_be_callable'
+        end
+      end
+    end
+
+    context 'when many parameter types' do
+      let(:code){'def foo(a, b, c, m = 1, n = 1, *rest, x, y, z, k: 1, l:, **kwrest, &blk)'}
+      let(:name){'foo'}
+
+      context 'when minimum args' do
+        let(:args){to_rubocop_ast('f a, b, c, x, y, z, l: 1').method_args}
+        include_examples 'should_be_callable'
+      end
+
+      context 'when not enough args' do
+        let(:args){to_rubocop_ast('f a, b, c, l: 1').method_args}
+        include_examples 'should_not_be_callable'
+      end
+
+      context 'when many args' do
+        let(:args){to_rubocop_ast('f a, b, c, d, e, f, g, h, i, j, k, l, l: 1').method_args}
+        include_examples 'should_be_callable'
       end
     end
   end

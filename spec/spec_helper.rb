@@ -108,3 +108,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+def to_rubocop_ast(code)
+  r = RuboCop::ProcessedSource.new(code, RUBY_VERSION.to_f)
+  r.ast
+end
