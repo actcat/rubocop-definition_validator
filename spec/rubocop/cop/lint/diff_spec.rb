@@ -50,6 +50,11 @@ index df650ee..7180d75 100644
       inspect_source(cop, 'hello(name)')
       expect(cop.offenses.size).to eq 1
     end
+
+    it 'accpets use unrelated method name' do
+      inspect_source(cop, 'poyopoyo(name)')
+      expect(cop.offenses).to be_empty
+    end
   end
 
   context 'when method args ware changed' do
@@ -77,6 +82,30 @@ index 6ca6c0f..6c5790d 100644
     it 'accpets call with 1 args' do
       inspect_source(cop, 'hello("pocke")')
       expect(cop.offenses.size).to eq 1
+    end
+  end
+
+  context 'when keyword params became required.' do
+    let(:diff){<<-'CODE'}
+diff --git a/test.rb b/test2.rb
+index 5ccf77e..0aba155 100644
+--- a/test.rb
++++ b/test2.rb
+@@ -1,3 +1,3 @@
+-def foo(a: 1)
++def foo(a:)
+   puts a
+ end
+    CODE
+
+    it 'registers an offence for calling foo without any args' do
+      inspect_source(cop, 'foo')
+      expect(cop.offenses.size).to eq 1
+    end
+
+    it 'accepts call with keyword args' do
+      inspect_source(cop, 'foo(a: 1)')
+      expect(cop.offenses).to be_empty
     end
   end
 end
