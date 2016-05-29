@@ -1,7 +1,8 @@
 require 'spec_helper'
 
-describe RuboCop::Cop::Lint::Diff do
-  subject(:cop){described_class.new}
+describe RuboCop::Cop::Lint::Diff, :config do
+  subject(:cop){described_class.new(config)}
+  let(:cop_config) { { 'Min' => 6 } }
 
   before do
     f = Tempfile.create('rubocop-diff-test-')
@@ -15,7 +16,7 @@ describe RuboCop::Cop::Lint::Diff do
     let(:diff){''}
 
     it 'accepts' do
-      inspect_source(cop, 'foo()')
+      inspect_source(cop, 'foobarbaz()')
       expect(cop.offenses).to be_empty
     end
 
@@ -32,13 +33,13 @@ index df650ee..7180d75 100644
 --- a/test.rb
 +++ b/test2.rb
 @@ -1,5 +1,5 @@
--def hello(name)
--  puts "hello #{name}!"
+-def hellohello(name)
+-  puts "hellohello #{name}!"
 +def hi(name)
 +  puts "hi #{name}!"
  end
  
- hello('pocke')
+ hellohello('pocke')
     CODE
 
     it 'accepts use `hi` method' do
@@ -46,8 +47,8 @@ index df650ee..7180d75 100644
       expect(cop.offenses).to be_empty
     end
 
-    it 'registers an offense for `hello` method' do
-      inspect_source(cop, 'hello(name)')
+    it 'registers an offense for `hellohello` method' do
+      inspect_source(cop, 'hellohello(name)')
       expect(cop.offenses.size).to eq 1
     end
 
@@ -64,23 +65,23 @@ index 6ca6c0f..6c5790d 100644
 --- a/test.rb
 +++ b/test2.rb
 @@ -1,5 +1,5 @@
--def hello(name)
--  puts "hello #{name}"
-+def hello(name, message)
-+  puts "hello #{name} #{message}"
+-def hellohello(name)
+-  puts "hellohello #{name}"
++def hellohello(name, message)
++  puts "hellohello #{name} #{message}"
  end
  
--hello('pocke')
-+hello('pocke', 'konnitiwa')
+-hellohello('pocke')
++hellohello('pocke', 'konnitiwa')
     CODE
 
     it 'accpets call with 2 args' do
-      inspect_source(cop, 'hello("pocke", "meow")')
+      inspect_source(cop, 'hellohello("pocke", "meow")')
       expect(cop.offenses).to be_empty
     end
 
     it 'accpets call with 1 args' do
-      inspect_source(cop, 'hello("pocke")')
+      inspect_source(cop, 'hellohello("pocke")')
       expect(cop.offenses.size).to eq 1
     end
   end
@@ -92,19 +93,19 @@ index 5ccf77e..0aba155 100644
 --- a/test.rb
 +++ b/test2.rb
 @@ -1,3 +1,3 @@
--def foo(a: 1)
-+def foo(a:)
+-def foobarbaz(a: 1)
++def foobarbaz(a:)
    puts a
  end
     CODE
 
-    it 'registers an offence for calling foo without any args' do
-      inspect_source(cop, 'foo')
+    it 'registers an offence for calling foobarbaz without any args' do
+      inspect_source(cop, 'foobarbaz')
       expect(cop.offenses.size).to eq 1
     end
 
     it 'accepts call with keyword args' do
-      inspect_source(cop, 'foo(a: 1)')
+      inspect_source(cop, 'foobarbaz(a: 1)')
       expect(cop.offenses).to be_empty
     end
   end

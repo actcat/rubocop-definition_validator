@@ -17,7 +17,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'rubocop/diff'
+require 'rubocop'
 require 'rspec-power_assert'
 require 'pry'
 require 'pry_testcase/rspec'
@@ -113,3 +113,5 @@ def to_rubocop_ast(code)
   r = RuboCop::ProcessedSource.new(code, RUBY_VERSION.to_f)
   r.ast
 end
+
+require 'rubocop/diff'

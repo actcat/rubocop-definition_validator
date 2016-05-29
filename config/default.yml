@@ -1,3 +1,4 @@
 Lint/Diff:
   Description: 'TODO'
   Enabled: true
+  Min: 6
