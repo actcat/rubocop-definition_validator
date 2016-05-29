@@ -5,14 +5,18 @@ describe Rubocop::Diff::Method do
     shared_examples 'should_be_callable' do
       it 'should be callable' do
         method = Rubocop::Diff::Method.new(code)
-        is_asserted_by{ method.callable?(name, args) }
+        callable, reason = method.callable?(name, args)
+        is_asserted_by{ callable == true }
+        is_asserted_by{ reason == nil }
       end
     end
 
     shared_examples 'should_not_be_callable' do
       it 'should not be callable' do
         method = Rubocop::Diff::Method.new(code)
-        is_asserted_by{ !method.callable?(name, args) }
+        callable, reason = method.callable?(name, args)
+        is_asserted_by{ callable == false }
+        is_asserted_by{ reason.is_a?(Proc) }
       end
     end
 
@@ -25,7 +29,7 @@ describe Rubocop::Diff::Method do
         include_examples 'should_be_callable'
       end
 
-      context 'when one args' do
+      context 'when too many args' do
         let(:name){'foo'}
         let(:args){[1,2,3]}
         include_examples 'should_not_be_callable'
