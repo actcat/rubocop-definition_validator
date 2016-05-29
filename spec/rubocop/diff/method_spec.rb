@@ -16,7 +16,7 @@ describe Rubocop::Diff::Method do
         method = Rubocop::Diff::Method.new(code)
         callable, reason = method.callable?(name, args)
         is_asserted_by{ callable == false }
-        is_asserted_by{ reason.is_a?(Proc) }
+        is_asserted_by{ reason.is_a?(Proc) or reason.is_a?(String) }
       end
     end
 
@@ -143,7 +143,7 @@ describe Rubocop::Diff::Method do
     end
 
     context 'when has keyword params' do
-      context 'when has keyword params with default value' do
+      context 'with default value' do
         let(:code){'def foo(bar: 1, baz: 2)'}
         let(:name){'foo'}
 

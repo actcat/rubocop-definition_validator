@@ -14,7 +14,8 @@ module RuboCop
 
             new_callable, reason = new.callable?(name, args)
             next if new_callable
-            msg = reason.(old, new)
+
+            msg = reason.respond_to?(:call) ? reason.(old, new) : reason
           end
 
           return unless msg
