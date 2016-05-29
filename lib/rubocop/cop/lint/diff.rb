@@ -24,7 +24,7 @@ module RuboCop
           end
 
           return unless msg
-          add_offense(node, :expression, 'Its worng!')
+          add_offense(node, :expression, msg)
         end
       end
     end
