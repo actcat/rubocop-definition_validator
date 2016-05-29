@@ -6,10 +6,18 @@ module RuboCop
           name = node.method_name.to_s
           args = node.method_args
 
-          method = Rubocop::Diff::ChangeDetector.changed_methods.find do |m|
-            m[:removed].callable?(name, args) && !m[:added].callable?(name, args)
+          msg = nil
+          Rubocop::Diff::ChangeDetector.changed_methods.each do |m|
+            old, new = m[:removed], m[:added]
+            old_callable, _ = old.callable?(name, args)
+            next unless old_callable
+
+            new_callable, reason = new.callable?(name, args)
+            next if new_callable
+            msg = reason.(old, new)
           end
-          return unless method
+
+          return unless msg
           add_offense(node, :expression, 'Its worng!')
         end
       end

@@ -70,6 +70,22 @@ module Rubocop::Diff
     end
 
 
+    %i[
+      normal_params
+      default_value_params
+      rest_params
+      normal_params_after_rest
+      keyword_params
+      keyword_rest_params
+    ].each.with_index do |name, idx|
+      eval <<-CODE
+  def #{name}
+    @params[#{idx}]
+  end
+      CODE
+    end
+
+
     private
 
     # decide default_value_params, rest_params, normal_params_after_rest
@@ -109,20 +125,6 @@ module Rubocop::Diff
         keyword_params.any?{|p| p[1] == false}
     end
 
-    %i[
-      normal_params
-      default_value_params
-      rest_params
-      normal_params_after_rest
-      keyword_params
-      keyword_rest_params
-    ].each.with_index do |name, idx|
-      eval <<-CODE
-  def #{name}
-    @params[#{idx}]
-  end
-      CODE
-    end
 
     # @param [RuboCop::Node] arg
     def usable_as_keyword_param?(arg)
