@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rubocop/diff/version'
+require 'rubocop/definition_validator/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "rubocop-diff"
-  spec.version       = Rubocop::Diff::VERSION
+  spec.name          = "rubocop-definition_validator"
+  spec.version       = Rubocop::DefinitionValidator::VERSION
   spec.authors       = ["Masataka Kuwabara"]
   spec.email         = ["p.ck.t22@gmail.com"]
 
   spec.summary       = %q{to do}
   spec.description   = %q{to do}
-  spec.homepage      = "https://github.com/actcat/rubocop-diff"
+  spec.homepage      = "https://github.com/actcat/rubocop-definition_validator"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"

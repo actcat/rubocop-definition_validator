@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Rubocop::Diff::ChangeDetector do
+describe Rubocop::DefinitionValidator::ChangeDetector do
   let(:diff){
     <<-'DIFF'
 diff --git a/test.rb b/test2.rb
@@ -20,7 +20,7 @@ index df650ee..7180d75 100644
 
   describe '.init' do
     let(:diff_path) do
-      f = Tempfile.create('rubocop-diff-test-')
+      f = Tempfile.create('rubocop-definition_validator-test-')
       f.write(diff)
       f.flush
       f.path
@@ -30,12 +30,12 @@ index df650ee..7180d75 100644
       File.delete(diff_path)
     end
 
-    subject{Rubocop::Diff::ChangeDetector.changed_methods}
+    subject{Rubocop::DefinitionValidator::ChangeDetector.changed_methods}
     it 'should assign @changed_methods' do
-      Rubocop::Diff::ChangeDetector.init(diff_path)
+      Rubocop::DefinitionValidator::ChangeDetector.init(diff_path)
       is_asserted_by{ subject.size == 1 }
-      is_asserted_by{ subject.first[:added].is_a? Rubocop::Diff::Method }
-      is_asserted_by{ subject.first[:removed].is_a? Rubocop::Diff::Method }
+      is_asserted_by{ subject.first[:added].is_a? Rubocop::DefinitionValidator::Method }
+      is_asserted_by{ subject.first[:removed].is_a? Rubocop::DefinitionValidator::Method }
     end
   end
 end

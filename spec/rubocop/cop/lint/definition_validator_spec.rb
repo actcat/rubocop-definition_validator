@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe RuboCop::Cop::Lint::Diff, :config do
+describe RuboCop::Cop::Lint::DefinitionValidator, :config do
   subject(:cop){described_class.new(config)}
   let(:cop_config) { { 'Min' => 6 } }
 
   before do
-    f = Tempfile.create('rubocop-diff-test-')
+    f = Tempfile.create('rubocop-definition_validator-test-')
     f.write(diff)
     f.flush
-    Rubocop::Diff::ChangeDetector.init(f.path)
+    Rubocop::DefinitionValidator::ChangeDetector.init(f.path)
     File.delete(f.path)
   end
 

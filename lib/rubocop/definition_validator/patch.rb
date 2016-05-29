@@ -3,7 +3,7 @@
 # The original method retuns only added lines.
 # However we want added and removed lines.
 #
-class Rubocop::Diff::Patch < GitDiffParser::Patch
+class Rubocop::DefinitionValidator::Patch < GitDiffParser::Patch
   ADDED_LINE   = -> (line) { line.start_with?('+') && line !~ /^\+\+\+/ }
   REMOVED_LINE = -> (line) { line.start_with?('-') && line !~ /^\-\-\-/ }
 
@@ -24,7 +24,7 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
         line_number = Regexp.last_match[:line_number].to_i
         removed_line_offset = 0
       when ADDED_LINE
-        line = Rubocop::Diff::Line.new(
+        line = Rubocop::DefinitionValidator::Line.new(
           content: content,
           number: line_number,
           patch_position: patch_position
@@ -33,7 +33,7 @@ class Rubocop::Diff::Patch < GitDiffParser::Patch
         line_number += 1
         removed_line_offset = 0
       when REMOVED_LINE
-        line = Rubocop::Diff::Line.new(
+        line = Rubocop::DefinitionValidator::Line.new(
           content: content,
           number: line_number + removed_line_offset,
           patch_position: patch_position

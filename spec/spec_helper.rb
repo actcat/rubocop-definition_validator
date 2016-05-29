@@ -114,4 +114,4 @@ def to_rubocop_ast(code)
   r.ast
 end
 
-require 'rubocop/diff'
+require 'rubocop/definition_validator'

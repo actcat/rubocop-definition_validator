@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Rubocop::Diff::Method do
+describe Rubocop::DefinitionValidator::Method do
   describe '#callable?' do
     shared_examples 'should_be_callable' do
       it 'should be callable' do
-        method = Rubocop::Diff::Method.new(code)
+        method = Rubocop::DefinitionValidator::Method.new(code)
         callable, reason = method.callable?(name, args)
         is_asserted_by{ callable == true }
         is_asserted_by{ reason == nil }
@@ -13,7 +13,7 @@ describe Rubocop::Diff::Method do
 
     shared_examples 'should_not_be_callable' do
       it 'should not be callable' do
-        method = Rubocop::Diff::Method.new(code)
+        method = Rubocop::DefinitionValidator::Method.new(code)
         callable, reason = method.callable?(name, args)
         is_asserted_by{ callable == false }
         is_asserted_by{ reason.is_a?(Proc) or reason.is_a?(String) }

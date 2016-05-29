@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Rubocop::Diff::Patch do
+describe Rubocop::DefinitionValidator::Patch do
   let(:diff){
     <<-DIFF
 diff --git a/foo.rb b/bar.rb
@@ -16,7 +16,7 @@ index 51aec3b..ae23ea2 100644
  end
     DIFF
   }
-  let(:patch){Rubocop::Diff::Patch.new(GitDiffParser::Patch.new(diff))}
+  let(:patch){Rubocop::DefinitionValidator::Patch.new(GitDiffParser::Patch.new(diff))}
 
   describe '#changed_lines' do
     subject{patch.changed_lines}
@@ -54,14 +54,14 @@ index 51aec3b..ae23ea2 100644
 
     it 'contains removed method' do
       subject.each do |s|
-        is_asserted_by{ s[:removed].is_a? Rubocop::Diff::Line}
+        is_asserted_by{ s[:removed].is_a? Rubocop::DefinitionValidator::Line}
         is_asserted_by{ s[:removed].type == '-'}
       end
     end
 
     it 'contains added method' do
       subject.each do |s|
-        is_asserted_by{ s[:added].is_a? Rubocop::Diff::Line}
+        is_asserted_by{ s[:added].is_a? Rubocop::DefinitionValidator::Line}
         is_asserted_by{ s[:added].type == '+'}
       end
     end

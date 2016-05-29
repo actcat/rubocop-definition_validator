@@ -1,7 +1,7 @@
 module RuboCop
   module Cop
     module Lint
-      class Diff < Cop
+      class DefinitionValidator < Cop
         def on_send(node)
           name = node.method_name.to_s
           args = node.method_args
@@ -9,7 +9,7 @@ module RuboCop
           p cop_config
 
           msg = nil
-          Rubocop::Diff::ChangeDetector.changed_methods.each do |m|
+          Rubocop::DefinitionValidator::ChangeDetector.changed_methods.each do |m|
             old, new = m[:removed], m[:added]
 
             next if old.name.size <= min

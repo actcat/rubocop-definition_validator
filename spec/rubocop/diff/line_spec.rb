@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Rubocop::Diff::Line do
+describe Rubocop::DefinitionValidator::Line do
   let(:content){'-  def foo'}
-  let(:line){Rubocop::Diff::Line.new({
+  let(:line){Rubocop::DefinitionValidator::Line.new({
     content: content,
     number: 1,
     patch_position: 2,

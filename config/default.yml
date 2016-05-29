@@ -1,4 +1,4 @@
-Lint/Diff:
+Lint/DefinitionValidator:
   Description: 'TODO'
   Enabled: true
   Min: 6

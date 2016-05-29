@@ -1,4 +1,4 @@
-class Rubocop::Diff::Line < GitDiffParser::Line
+class Rubocop::DefinitionValidator::Line < GitDiffParser::Line
   attr_reader :content
 
   # trim `+` or `-` prefix

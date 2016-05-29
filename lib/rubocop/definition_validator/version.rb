@@ -1,5 +1,5 @@
 module Rubocop
-  module Diff
+  module DefinitionValidator
     VERSION = "0.1.0"
   end
 end

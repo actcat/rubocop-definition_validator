@@ -1,4 +1,4 @@
-module Rubocop::Diff::Reason
+module Rubocop::DefinitionValidator::Reason
   class << self
     # @return [Proc]
     def method_name

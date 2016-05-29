@@ -1,6 +1,6 @@
 require 'ripper'
 
-module Rubocop::Diff
+module Rubocop::DefinitionValidator
   class Method
     class InvalidAST < ArgumentError; end
 

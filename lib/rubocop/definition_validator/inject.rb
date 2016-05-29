@@ -2,7 +2,7 @@
 require 'yaml'
 
 module RuboCop
-  module Diff
+  module DefinitionValidator
     # Because RuboCop doesn't yet support plugins, we have to monkey patch in a
     # bit of our configuration.
     module Inject

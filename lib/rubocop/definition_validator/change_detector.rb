@@ -1,4 +1,4 @@
-module Rubocop::Diff::ChangeDetector
+module Rubocop::DefinitionValidator::ChangeDetector
   class << self
     attr_reader :changed_methods
 
@@ -10,7 +10,7 @@ module Rubocop::Diff::ChangeDetector
 
       diff = File.read(diff_path)
       parsed = GitDiffParser::Patches.parse(diff)
-      patches = parsed.map{|orig_patch| patch = Rubocop::Diff::Patch.new(orig_patch)}
+      patches = parsed.map{|orig_patch| patch = Rubocop::DefinitionValidator::Patch.new(orig_patch)}
       # [
       #   {added: Method, removed: Method}
       # ]
@@ -20,8 +20,8 @@ module Rubocop::Diff::ChangeDetector
         .map{|code|
         code.map{|k, v|
           begin
-            [k, Rubocop::Diff::Method.new(v.body)]
-          rescue Rubocop::Diff::Method::InvalidAST
+            [k, Rubocop::DefinitionValidator::Method.new(v.body)]
+          rescue Rubocop::DefinitionValidator::Method::InvalidAST
             nil
           end
         }.compact.to_h
@@ -30,5 +30,5 @@ module Rubocop::Diff::ChangeDetector
   end
 end
 
-# XXX: 暫定的に rubocop-diff.diff からdiffを読む
-Rubocop::Diff::ChangeDetector.init('./.rubocop-diff.diff')
+# XXX: 暫定的に .rubocop-definition_validator.diff からdiffを読む
+Rubocop::DefinitionValidator::ChangeDetector.init('./.rubocop-definition_validator.diff')
