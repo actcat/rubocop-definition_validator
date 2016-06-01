@@ -13,7 +13,7 @@ module Rubocop::DefinitionValidator::Reason
       n = expected - given
       -> (_old, new) {
         not_enough_arg_names = new.__send__(kind).dup.pop(n).map{|x| x[1]}
-        "Not enough arguments. Did you forget the following arguments? #{not_enough_arg_names.join(', ')}"
+        "Not enough arguments. Did you forget the following arguments? [#{not_enough_arg_names.join(', ')}]"
       }
     end
   end
