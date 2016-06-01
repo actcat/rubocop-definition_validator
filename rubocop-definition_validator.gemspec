@@ -9,14 +9,15 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Masataka Kuwabara"]
   spec.email         = ["p.ck.t22@gmail.com"]
 
-  spec.summary       = %q{to do}
-  spec.description   = %q{to do}
+  spec.summary       = %q{This tool detects omission of modification of callers when the name of a method, number of arguments, or the name of a keyword argument is modified.}
+  spec.description   = %q{This tool detects omission of modification of callers when the name of a method, number of arguments, or the name of a keyword argument is modified.}
   spec.homepage      = "https://github.com/actcat/rubocop-definition_validator"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+  # TODO: License
 
   spec.add_runtime_dependency 'rubocop', '>= 0.31.0'
   spec.add_runtime_dependency 'git_diff_parser', '>= 2.2.0'

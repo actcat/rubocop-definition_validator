@@ -1,8 +1,6 @@
 # Rubocop::DefinitionValidator
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rubocop/definition_validator`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This tool detects omission of modification of callers when the name of a method, number of arguments, or the name of a keyword argument is modified.
 
 ## Installation
 
@@ -22,7 +20,10 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```sh
+$ git diff TARGET_COMMIT > ./.rubocop-definition_validator.diff
+$ rubocop -r rubocop/definition_validator
+```
 
 ## Development
 
