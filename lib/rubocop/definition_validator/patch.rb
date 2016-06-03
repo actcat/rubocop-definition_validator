@@ -53,11 +53,9 @@ class Rubocop::DefinitionValidator::Patch < GitDiffParser::Patch
     lines = changed_lines
     lines
       .group_by{|l| l.number}
-      .values
-      .select{|l| l.size == 2}
-      .select{|l| t = l.map(&:type); t.include?('-') && t.include?('+')}
-      .select{|l| l.all?{|x| x.content =~ /def\s+\w+/}}
-      .map{|l| l.sort_by(&:type)}
-      .map{|l| {added: l.first, removed: l.last}}
+      .select{|_, v| v.size == 2}
+      .select{|_, v| t = v.map(&:type); t.include?('-') && t.include?('+')}
+      .select{|_, v| v.all?{|x| x.content =~ /def\s+\w+/}}
+      .map{|line, v| s = v.sort_by(&:type); {added: s.first, removed: s.last, line: line}}
   end
 end

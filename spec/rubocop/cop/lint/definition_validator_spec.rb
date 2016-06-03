@@ -50,7 +50,7 @@ index df650ee..7180d75 100644
     it 'registers an offense for `hellohello` method' do
       inspect_source(cop, 'hellohello(name)')
       expect(cop.offenses.size).to eq 1
-      expect(cop.offenses.first.message).to eq 'hellohello is undefined. Did you mean? hi'
+      expect(cop.offenses.first.message).to eq "hellohello is undefined. Did you mean? hi\nThis method is defined at test.rb L1"
     end
 
     it 'accpets use unrelated method name' do
@@ -84,7 +84,7 @@ index 6ca6c0f..6c5790d 100644
     it 'accpets call with 1 args' do
       inspect_source(cop, 'hellohello("pocke")')
       expect(cop.offenses.size).to eq 1
-      expect(cop.offenses.first.message).to eq 'Not enough arguments. Did you forget the following arguments? [message]'
+      expect(cop.offenses.first.message).to eq 'Not enough arguments. Did you forget the following arguments? [message]\nThis method is defined at test.rb L1'
     end
   end
 
@@ -104,7 +104,7 @@ index 5ccf77e..0aba155 100644
     it 'registers an offence for calling foobarbaz without any args' do
       inspect_source(cop, 'foobarbaz')
       expect(cop.offenses.size).to eq 1
-      expect(cop.offenses.first.message).to eq 'Keyword params is required.'
+      expect(cop.offenses.first.message).to eq 'Keyword params is required.\nThis method is defined at test.rb L1'
     end
 
     it 'accepts call with keyword args' do

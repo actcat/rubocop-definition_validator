@@ -53,6 +53,7 @@ index 51aec3b..ae23ea2 100644
     end
 
     it 'contains removed method' do
+      is_asserted_by{ not subject.empty? }
       subject.each do |s|
         is_asserted_by{ s[:removed].is_a? Rubocop::DefinitionValidator::Line}
         is_asserted_by{ s[:removed].type == '-'}
@@ -60,13 +61,22 @@ index 51aec3b..ae23ea2 100644
     end
 
     it 'contains added method' do
+      is_asserted_by{ not subject.empty? }
       subject.each do |s|
         is_asserted_by{ s[:added].is_a? Rubocop::DefinitionValidator::Line}
         is_asserted_by{ s[:added].type == '+'}
       end
     end
 
+    it 'contain line number' do
+      is_asserted_by{ not subject.empty? }
+      subject.each do |s|
+        is_asserted_by{ s[:line].is_a? Integer }
+      end
+    end
+
     it 'contains `def`' do
+      is_asserted_by{ not subject.empty? }
       subject.each do |s|
         is_asserted_by{ s[:added].content.include? 'def' }
         is_asserted_by{ s[:removed].content.include? 'def' }

@@ -19,6 +19,7 @@ module Rubocop::DefinitionValidator::ChangeDetector
         .flatten
         .map{|code|
         code.map{|k, v|
+          next [k, v] if k == :line
           begin
             [k, Rubocop::DefinitionValidator::Method.new(v.body)]
           rescue Rubocop::DefinitionValidator::Method::InvalidAST
