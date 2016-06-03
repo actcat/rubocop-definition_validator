@@ -5,7 +5,7 @@ module RuboCop
         def on_send(node)
           name = node.method_name.to_s
           args = node.method_args
-          min = cop_config['Min']
+          min = cop_config['Min'] || 6
 
           msg = nil
           Rubocop::DefinitionValidator::ChangeDetector.changed_methods.each do |m|
