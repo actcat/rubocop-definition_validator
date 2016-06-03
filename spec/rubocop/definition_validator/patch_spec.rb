@@ -41,45 +41,21 @@ index 51aec3b..ae23ea2 100644
     end
   end
 
-  describe '#changed_method_codes' do
-    subject{patch.changed_method_codes}
+  describe '#changed_methods' do
+    subject{patch.changed_methods}
 
     it {is_expected.to be_a Array}
+    it {is_expected.not_to be_empty}
 
-    it 'should be Array of Hash' do
+    it 'should be Array of ChangedMethod' do
       subject.each do |s|
-        is_asserted_by{ s.is_a? Hash }
-      end
-    end
-
-    it 'contains removed method' do
-      is_asserted_by{ not subject.empty? }
-      subject.each do |s|
-        is_asserted_by{ s[:removed].is_a? Rubocop::DefinitionValidator::Line}
-        is_asserted_by{ s[:removed].type == '-'}
-      end
-    end
-
-    it 'contains added method' do
-      is_asserted_by{ not subject.empty? }
-      subject.each do |s|
-        is_asserted_by{ s[:added].is_a? Rubocop::DefinitionValidator::Line}
-        is_asserted_by{ s[:added].type == '+'}
+        is_asserted_by{ s.is_a? Rubocop::DefinitionValidator::ChangedMethod }
       end
     end
 
     it 'contain line number' do
-      is_asserted_by{ not subject.empty? }
       subject.each do |s|
-        is_asserted_by{ s[:line].is_a? Integer }
-      end
-    end
-
-    it 'contains `def`' do
-      is_asserted_by{ not subject.empty? }
-      subject.each do |s|
-        is_asserted_by{ s[:added].content.include? 'def' }
-        is_asserted_by{ s[:removed].content.include? 'def' }
+        is_asserted_by{ s.line == 2 }
       end
     end
   end

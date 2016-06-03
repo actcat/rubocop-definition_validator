@@ -15,18 +15,8 @@ module Rubocop::DefinitionValidator::ChangeDetector
       #   {added: Method, removed: Method}
       # ]
       @changed_methods = patches
-        .map{|patch| patch.changed_method_codes}
+        .map{|patch| patch.changed_methods}
         .flatten
-        .map{|code|
-        code.map{|k, v|
-          next [k, v] if k == :line
-          begin
-            [k, Rubocop::DefinitionValidator::Method.new(v.body)]
-          rescue Rubocop::DefinitionValidator::Method::InvalidAST
-            nil
-          end
-        }.compact.to_h
-      }
     end
   end
 end

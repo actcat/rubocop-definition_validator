@@ -9,7 +9,8 @@ RuboCop::DefinitionValidator::Inject.defaults!
 
 require 'rubocop/definition_validator/line'
 require 'rubocop/definition_validator/patch'
-require 'rubocop/definition_validator/reason'
+require 'rubocop/definition_validator/message'
+require 'rubocop/definition_validator/changed_method'
 require 'rubocop/definition_validator/method'
 require 'rubocop/definition_validator/change_detector'
 
