@@ -48,9 +48,9 @@ module Rubocop::DefinitionValidator
 
     # @param [Array<RuboCop::Node>] args
     # @return [Boolean] callable
-    # @return [Proc] cause
+    # @return [Object] cause
     def callable?(name, args)
-      return false, Reason.method_name unless name == @name
+      return false, :method_name unless name == @name
 
       args = args.dup
 
@@ -58,11 +58,8 @@ module Rubocop::DefinitionValidator
       normal_params_size = (normal_params || []).size
       received_normal_params_size = args.shift(normal_params_size).size
       unless received_normal_params_size == normal_params_size
-        return false, Reason.not_enough_arguments(
-          received_normal_params_size,
-          normal_params_size,
-          :normal_params,
-        )
+        return false, :not_enough_norml_arguments, received_normal_params_size, normal_params_size
+        
       end
 
       if has_required_keyword_params?
@@ -100,11 +97,7 @@ module Rubocop::DefinitionValidator
       normal_params_after_rest_size = (normal_params_after_rest || []).size
       given_normal_params_after_rest_size = args.pop(normal_params_after_rest_size).size
       unless given_normal_params_after_rest_size == normal_params_after_rest_size
-        return false, Reason.not_enough_arguments(
-          given_normal_params_after_rest_size,
-          normal_params_after_rest_size,
-          :normal_params_after_rest
-        )
+        return false, :not_enough_normal_after_rest_arguments, given_normal_params_after_rest_size, normal_params_after_rest_size
       end
 
       # rest引数があれば全て呑み込むためtrue
@@ -113,22 +106,22 @@ module Rubocop::DefinitionValidator
       if default_value_params
         return true if args.size <= default_value_params.size
         # XXX: optimize message.
-        return false, "Too many argument"
+        return false, :too_many_arguments
       end
       return true if args.empty?
-      return false, "Too many argument"
+      return false, :too_many_arguments
     end
 
     def decide_with_required_keyword_params(args)
       kwparam = args.pop(1)
-      usable, reason = usable_as_keyword_param?(kwparam[0])
-      return false, reason unless usable
+      usable, *reason = usable_as_keyword_param?(kwparam[0])
+      return false, *reason unless usable
 
       return decide_rest_args(args)
     end
 
     def decide_with_keyword_params(args)
-      ok, _ = decide_rest_args(args.dup)
+      ok, *_ = decide_rest_args(args.dup)
       return true if ok
 
       return decide_with_required_keyword_params(args)
@@ -149,8 +142,8 @@ module Rubocop::DefinitionValidator
     # @param [RuboCop::Node] arg
     def usable_as_keyword_param?(arg)
       # should be hash
-      return false, "Keyword params is required." unless arg
-      return false, "Keyword params should be hash. But got #{arg.loc.expression.source}" unless arg.hash_type? || !arg.literal?
+      return false, :kwparam_required unless arg
+      return false, :kwparam_should_be_hash, arg.loc.expression.source unless arg.hash_type? || !arg.literal?
 
       # should have specified keyword
       return true unless arg.hash_type?
@@ -171,7 +164,7 @@ module Rubocop::DefinitionValidator
         not received_keyword_names.include?(name)
       end
       unless not_fould_requireds.empty?
-        return false, "The following keyword parameters are required. But not received. #{not_fould_requireds.join(', ')}"
+        return false, :kwparam_not_found, not_fould_requireds.join(', ')
       end
 
       return true if keyword_rest_params
@@ -184,7 +177,7 @@ module Rubocop::DefinitionValidator
         not allowed_keyword_names.include?(name)
       end
       unless unexpected_keywords.empty?
-        return false, "The following keyword parameters are not expected. But received. #{unexpected_keywords}"
+        return false, :unexpected_kwparam, unexpected_keywords
       end
       return true
     end

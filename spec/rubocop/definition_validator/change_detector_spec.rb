@@ -34,9 +34,9 @@ index df650ee..7180d75 100644
     it 'should assign @changed_methods' do
       Rubocop::DefinitionValidator::ChangeDetector.init(diff_path)
       is_asserted_by{ subject.size == 1 }
-      is_asserted_by{ subject.first[:added].is_a? Rubocop::DefinitionValidator::Method }
-      is_asserted_by{ subject.first[:removed].is_a? Rubocop::DefinitionValidator::Method }
-      is_asserted_by{ subject.first[:line] == 1 }
+      is_asserted_by{ subject.first.added.is_a? Rubocop::DefinitionValidator::Method }
+      is_asserted_by{ subject.first.removed.is_a? Rubocop::DefinitionValidator::Method }
+      is_asserted_by{ subject.first.line == 1 }
     end
   end
 end

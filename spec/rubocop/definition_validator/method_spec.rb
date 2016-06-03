@@ -5,18 +5,19 @@ describe Rubocop::DefinitionValidator::Method do
     shared_examples 'should_be_callable' do
       it 'should be callable' do
         method = Rubocop::DefinitionValidator::Method.new(code)
-        callable, reason = method.callable?(name, args)
+        callable, *reason = method.callable?(name, args)
         is_asserted_by{ callable == true }
-        is_asserted_by{ reason == nil }
+        is_asserted_by{ reason.empty? }
       end
     end
 
     shared_examples 'should_not_be_callable' do
       it 'should not be callable' do
         method = Rubocop::DefinitionValidator::Method.new(code)
-        callable, reason = method.callable?(name, args)
+        callable, *reason = method.callable?(name, args)
         is_asserted_by{ callable == false }
-        is_asserted_by{ reason.is_a?(Proc) or reason.is_a?(String) }
+        is_asserted_by{ reason.is_a? Array }
+        is_asserted_by{ not reason.empty? }
       end
     end
 

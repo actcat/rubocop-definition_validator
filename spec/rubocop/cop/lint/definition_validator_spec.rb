@@ -31,7 +31,7 @@ describe RuboCop::Cop::Lint::DefinitionValidator, :config do
 diff --git a/test.rb b/test2.rb
 index df650ee..7180d75 100644
 --- a/test.rb
-+++ b/test2.rb
++++ b/test.rb
 @@ -1,5 +1,5 @@
 -def hellohello(name)
 -  puts "hellohello #{name}!"
@@ -64,7 +64,7 @@ index df650ee..7180d75 100644
 diff --git a/test.rb b/test2.rb
 index 6ca6c0f..6c5790d 100644
 --- a/test.rb
-+++ b/test2.rb
++++ b/test.rb
 @@ -1,5 +1,5 @@
 -def hellohello(name)
 -  puts "hellohello #{name}"
@@ -81,10 +81,10 @@ index 6ca6c0f..6c5790d 100644
       expect(cop.offenses).to be_empty
     end
 
-    it 'accpets call with 1 args' do
+    it 'registers an offence for calling with 1 args' do
       inspect_source(cop, 'hellohello("pocke")')
       expect(cop.offenses.size).to eq 1
-      expect(cop.offenses.first.message).to eq 'Not enough arguments. Did you forget the following arguments? [message]\nThis method is defined at test.rb L1'
+      expect(cop.offenses.first.message).to eq "Not enough arguments. Did you forget the following arguments? [message]\nThis method is defined at test.rb L1"
     end
   end
 
@@ -93,7 +93,7 @@ index 6ca6c0f..6c5790d 100644
 diff --git a/test.rb b/test2.rb
 index 5ccf77e..0aba155 100644
 --- a/test.rb
-+++ b/test2.rb
++++ b/test.rb
 @@ -1,3 +1,3 @@
 -def foobarbaz(a: 1)
 +def foobarbaz(a:)
@@ -104,7 +104,7 @@ index 5ccf77e..0aba155 100644
     it 'registers an offence for calling foobarbaz without any args' do
       inspect_source(cop, 'foobarbaz')
       expect(cop.offenses.size).to eq 1
-      expect(cop.offenses.first.message).to eq 'Keyword params is required.\nThis method is defined at test.rb L1'
+      expect(cop.offenses.first.message).to eq "Keyword params is required.\nThis method is defined at test.rb L1"
     end
 
     it 'accepts call with keyword args' do

@@ -9,17 +9,18 @@ module RuboCop
 
           msg = nil
           Rubocop::DefinitionValidator::ChangeDetector.changed_methods.each do |m|
-            old, new = m[:removed], m[:added]
+            old, new = m.removed, m.added
 
             next if old.name.size <= min
 
-            old_callable, _ = old.callable?(name, args)
+            PryTestcase.pry
+            old_callable, *_ = old.callable?(name, args)
             next unless old_callable
 
-            new_callable, reason = new.callable?(name, args)
+            new_callable, *reason = new.callable?(name, args)
             next if new_callable
 
-            msg = reason.respond_to?(:call) ? reason.(old, new) : reason
+            msg = Rubocop::DefinitionValidator::Message.new(m).of(*reason)
           end
 
           return unless msg
