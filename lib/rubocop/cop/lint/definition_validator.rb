@@ -13,7 +13,6 @@ module RuboCop
 
             next if old.name.size <= min
 
-            PryTestcase.pry
             old_callable, *_ = old.callable?(name, args)
             next unless old_callable
 
