@@ -18,8 +18,9 @@ module Rubocop::DefinitionValidator::ChangeDetector
         .map{|patch| patch.changed_methods}
         .flatten
     end
+
+    def changed_methods
+      @changed_methods || init('./.rubocop-definition_validator.diff')
+    end
   end
 end
-
-# XXX: 暫定的に .rubocop-definition_validator.diff からdiffを読む
-Rubocop::DefinitionValidator::ChangeDetector.init('./.rubocop-definition_validator.diff')

@@ -59,8 +59,13 @@ module Rubocop::DefinitionValidator
         .select{|_, v| v.all?{|x| x.content =~ /def\s+\w+/}}
         .map{|line, v|
           sorted = v.sort_by(&:type)
-          ChangedMethod.new(sorted.first, sorted.last, line, @file)
+          begin
+            ChangedMethod.new(sorted.first, sorted.last, line, @file)
+          rescue Method::InvalidAST => ex
+            warn "Warning: #{ex}\n#{ex.backtrace.join("\n")}"if RuboCop::ConfigLoader.debug
+          end
         }
+        .compact
     end
   end
 end

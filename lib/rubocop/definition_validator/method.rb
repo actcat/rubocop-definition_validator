@@ -35,7 +35,7 @@ module Rubocop::DefinitionValidator
         params = ast[1][0][2]
         name = ast[1][0][1][1]
       rescue NoMethodError => ex
-        raise InvalidAST, "Can't parse AST. \nAST: #{ast}\nError: #{ex}"
+        raise InvalidAST, "Can't parse AST. \nCode: #{code}\nError: #{ex}"
       end
 
       if params[0] == :paren
